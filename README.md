@@ -41,5 +41,52 @@ It includes 2 Flutter frameworks:
 ![Flutter.framework](flutter_empty_flutter_framework_size.png)
 
 
+### Common problems that I meet from do this work.
+
+```
+FAILURE: Build failed with an exception.                                
+                                                                        
+* What went wrong:                                                      
+Execution failed for task ':base_webview:verifyReleaseResources'.       
+> A failure occurred while executing com.android.build.gradle.internal.tasks.Workers$ActionFacade
+   > Android resource linking failed                                    
+     /Users/darkknight/.gradle/caches/transforms-2/files-2.1/a528b13ac93e64cafa3d0480e2c93207/core-1.1.0/res/values/values.xml:142:5-173:25: AAPT: error: resource android:attr/fontVariationSettings not found.
+                                                                        
+     /Users/darkknight/.gradle/caches/transforms-2/files-2.1/a528b13ac93e64cafa3d0480e2c93207/core-1.1.0/res/values/values.xml:142:5-173:25: AAPT: error: resource android:attr/ttcIndex not found.
+                                                                        
+                                                                        
+* Try:                                                                  
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+                                                                        
+* Get more help at https://help.gradle.org                              
+                                                                        
+BUILD FAILED in 35s             
+```
+
+This cause by android build tool version is not match. We need to config the build tool version for all sub-projects.
+
+```
+subprojects {
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 28
+                buildToolsVersion '28.0.3'
+
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+
+            dependencies {
+                implementation 'androidx.appcompat:appcompat:1.0.2'
+            }
+        }
+    }
+}
+```
+
+
 
 
